@@ -123,8 +123,8 @@ TEST(ProfileConfigFileAWSCredentialsProviderTest, TestDefaultConfig)
 
 
     ProfileConfigFileAWSCredentialsProvider provider(10);
-    auto accessKey =provider.GetAWSCredentials().GetAWSAccessKeyId();
-    auto secretKey =provider.GetAWSCredentials().GetAWSSecretKey();
+    auto accessKey = provider.GetAWSCredentials().GetAWSAccessKeyId();
+    auto secretKey = provider.GetAWSCredentials().GetAWSSecretKey();
     EXPECT_STREQ("DefaultAccessKey", accessKey.c_str());
     EXPECT_STREQ("DefaultSecretKey", secretKey.c_str());
 
