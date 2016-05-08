@@ -101,6 +101,7 @@ TEST(ProfileConfigFileAWSCredentialsProviderTest, TestDefaultConfig)
     FileSystemUtils::RelocateFileOrDirectory(configFileName.c_str(), tempFileName.c_str());
 
     Aws::OFStream configFile(configFileName.c_str(), Aws::OFStream::out | Aws::OFStream::trunc);
+    ASSERT_TRUE(configFile.good()) << "Failed to create " << configFileName << " because " << strerror(errno);
 
     configFile << std::endl;
     configFile << "[Somebody Else ]" << std::endl;
@@ -122,8 +123,10 @@ TEST(ProfileConfigFileAWSCredentialsProviderTest, TestDefaultConfig)
 
 
     ProfileConfigFileAWSCredentialsProvider provider(10);
-    EXPECT_STREQ("DefaultAccessKey", provider.GetAWSCredentials().GetAWSAccessKeyId().c_str());
-    EXPECT_STREQ("DefaultSecretKey", provider.GetAWSCredentials().GetAWSSecretKey().c_str());
+    auto accessKey =provider.GetAWSCredentials().GetAWSAccessKeyId();
+    auto secretKey =provider.GetAWSCredentials().GetAWSSecretKey();
+    EXPECT_STREQ("DefaultAccessKey", accessKey.c_str());
+    EXPECT_STREQ("DefaultSecretKey", secretKey.c_str());
 
     FileSystemUtils::RemoveFileIfExists(configFileName.c_str());
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
